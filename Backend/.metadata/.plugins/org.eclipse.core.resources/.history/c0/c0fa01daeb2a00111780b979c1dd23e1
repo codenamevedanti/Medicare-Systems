@@ -1,0 +1,53 @@
+package com.demo.model;
+
+import lombok.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "appointments")
+@Data 
+@NoArgsConstructor 
+@AllArgsConstructor 
+@Builder
+public class Appointment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
+
+    private LocalDate appointmentDate;
+    private LocalTime appointmentTime;
+
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status = AppointmentStatus.SCHEDULED;
+
+    private String reason;
+    private String notes;
+    private String diagnosis;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public enum AppointmentStatus {
+        SCHEDULED, CONFIRMED, COMPLETED, CANCELLED, NO_SHOW
+    }
+}

@@ -1,0 +1,73 @@
+package com.demo.service;
+
+import com.demo.model.*;
+import com.demo.repository.*;
+import com.demo.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class BillingService {
+
+    private final BillRepository billRepository;
+    private final PatientRepository patientRepository;
+
+    public List<Bill> getAllBills() {
+        return billRepository.findAll();
+    }
+
+    public Bill getBillById(Long id) {
+        return billRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Bill not found with id: " + id));
+    }
+
+    public Bill createBill(Long patientId, Bill bill) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "Patient not found"));
+        bill.setPatient(patient);
+        bill.setCreatedAt(LocalDateTime.now());
+        bill.setStatus("UNPAID");
+        bill.setTotalAmount(calculateTotal(bill));
+        return billRepository.save(bill);
+    }
+
+    public Bill updateBill(Long id, Bill updated) {
+        Bill bill = getBillById(id);
+        bill.setItems(updated.getItems());
+        bill.setTotalAmount(calculateTotal(updated));
+        bill.setStatus(updated.getStatus());
+        bill.setNotes(updated.getNotes());
+        return billRepository.save(bill);
+    }
+
+    public Bill markAsPaid(Long id) {
+        Bill bill = getBillById(id);
+        bill.setStatus("PAID");
+        bill.setPaidAt(LocalDateTime.now());
+        return billRepository.save(bill);
+    }
+
+    public void deleteBill(Long id) {
+        billRepository.deleteById(id);
+    }
+
+    public List<Bill> getBillsByPatient(Long patientId) {
+        return billRepository.findByPatientId(patientId);
+    }
+
+    public List<Bill> getBillsByStatus(String status) {
+        return billRepository.findByStatus(status);
+    }
+
+    private double calculateTotal(Bill bill) {
+        if (bill.getItems() == null) return 0.0;
+        return bill.getItems().stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+    }
+}

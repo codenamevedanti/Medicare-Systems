@@ -1,0 +1,56 @@
+package com.demo.service;
+
+import com.demo.model.*;
+import com.demo.repository.*;
+import com.demo.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class AppointmentService {
+
+    private final AppointmentRepository appointmentRepository;
+    private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
+
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
+
+    public Appointment getById(Long id) {
+        return appointmentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Appointment not found: " + id));
+    }
+
+    public Appointment createAppointment(Long patientId, Long doctorId, Appointment appointment) {
+        Patient patient = patientRepository.findById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
+        Doctor doctor = doctorRepository.findById(doctorId)
+            .orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
+
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+        return appointmentRepository.save(appointment);
+    }
+
+    public Appointment updateStatus(Long id, Appointment.AppointmentStatus status) {
+        Appointment apt = getById(id);
+        apt.setStatus(status);
+        return appointmentRepository.save(apt);
+    }
+
+    public List<Appointment> getByDate(LocalDate date) {
+        return appointmentRepository.findByAppointmentDate(date);
+    }
+
+    public List<Appointment> getByPatient(Long patientId) {
+        return appointmentRepository.findByPatientId(patientId);
+    }
+
+    public List<Appointment> getByDoctor(Long doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId);
+    }
+}

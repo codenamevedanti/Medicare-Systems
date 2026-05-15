@@ -1,0 +1,11 @@
+com\demo\config\JWTConfig.class
+com\demo\model\User$UserBuilder.class
+com\demo\security\CustomUserDetailsService.class
+com\demo\security\JwtAuthenticationFilter.class
+com\demo\config\SecurityConfig.class
+com\demo\repository\UserRepository.class
+com\demo\model\User.class
+com\demo\config\AdminSeeder.class
+com\demo\security\JwtTokenProvider.class
+com\demo\config\CorsConfig.class
+com\demo\model\User$Role.class

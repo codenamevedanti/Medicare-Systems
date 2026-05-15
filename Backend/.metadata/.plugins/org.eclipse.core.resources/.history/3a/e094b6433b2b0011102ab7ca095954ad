@@ -1,0 +1,37 @@
+package com.demo.service;
+
+import com.demo.model.Medicine;
+import com.demo.repository.MedicineRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class PharmacyService {
+
+    private final MedicineRepository medicineRepository;
+
+    public List<Medicine> getAllMedicines() {
+        return medicineRepository.findAll();
+    }
+
+    public Medicine addMedicine(Medicine medicine) {
+        return medicineRepository.save(medicine);
+    }
+
+    public Medicine updateStock(Long id, Integer quantity) {
+        Medicine med = medicineRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Medicine not found"));
+        med.setStockQuantity(med.getStockQuantity() + quantity);
+        return medicineRepository.save(med);
+    }
+
+    public List<Medicine> getLowStockMedicines() {
+        return medicineRepository.findByStockQuantityLessThan(10);
+    }
+
+    public List<Medicine> searchMedicines(String name) {
+        return medicineRepository.findByNameContaining(name);
+    }
+}

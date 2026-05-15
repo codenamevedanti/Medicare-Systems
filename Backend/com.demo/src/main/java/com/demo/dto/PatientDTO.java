@@ -1,0 +1,27 @@
+package com.demo.dto;
+
+import lombok.Data;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+public class PatientDTO {
+
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private LocalDate dateOfBirth;
+    private String gender;
+    private String bloodGroup;
+    private String phone;
+    private String email;
+    private String address;
+    private String emergencyContact;
+    private String emergencyPhone;
+    private String medicalHistory;
+    private String allergies;
+    private LocalDateTime registeredAt;
+    private boolean active;
+    private String password;       
+    private String confirmPassword;
+}
