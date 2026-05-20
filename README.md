@@ -1,4 +1,4 @@
-# 🏥 Hospital Management System
+# 🏥 Ratnadeep Hospitals
 
 A full-stack web application for managing hospital operations — including patient records, appointments, doctor schedules, billing, and more — built with **React**, **Spring Boot**, **Hibernate**, and **SQL**.
 
