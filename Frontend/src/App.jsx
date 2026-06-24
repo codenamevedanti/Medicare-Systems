@@ -15,7 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Appointments from "./pages/Appointments";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
-import HospitalChatbot from "./components/HospitalChatbot";
+import HospitalChatbot from "./components/HospitalChatBot";
 import InfoPage from "./pages/InfoPage";
 import PublicDoctors from "./pages/PublicDoctors";
 
